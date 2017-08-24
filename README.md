@@ -1,4 +1,4 @@
-# Toy
+# :black_large_square: :red_circle: :small_red_triangle_down: `generate-shapes`
 
 A script to generate labeled toy datasets for object detection algorithms and
 machine learning models (like [R-CNN](https://arxiv.org/abs/1506.01497)).
@@ -14,21 +14,21 @@ Some examples:
 <p align="center">
   <img src="examples/gray-rectangle.png">
   <br><br>
-  <code>$ ./toy.py --number 1 --gray --shape rectangle --output-dir images</code>
+  <code>$ ./generate-shapes.py --number 1 --gray --shape rectangle --output-dir images</code>
   <br>
 </p>
 
 <p align="center">
 <img src="examples/color-mixed-no-overlap.png">
 <br><br>
-<code>$ ./toy.py --number 1 --output-dir out</code>
+<code>$ ./generate-shapes.py --number 1 --output-dir out</code>
 <br>
 </p>
 
 <p align="center">
   <img src="examples/color-mixed.png">
   <br><br>
-  <code>$ ./toy.py --number 1 --allow-overlap --output-dir out</code>
+  <code>$ ./generate-shapes.py --number 1 --allow-overlap --output-dir out</code>
   <br>
 </p>
 
@@ -60,7 +60,7 @@ Example `labels.json`
 ## Options
 
 ```
-usage: toy.py [-h] -n NUMBER [--width WIDTH] [--height HEIGHT]
+usage: generate-shapes.py [-h] -n NUMBER [--width WIDTH] [--height HEIGHT]
               [--max-shapes MAX_SHAPES] [--min-shapes MIN_SHAPES]
               [--min-dimension MIN_DIMENSION] [--max-dimension MAX_DIMENSION]
               [--min-intensity MIN_INTENSITY] [--gray]
