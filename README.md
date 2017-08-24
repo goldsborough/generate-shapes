@@ -1,4 +1,4 @@
-# :black_large_square: :red_circle: :small_red_triangle_down: `generate-shapes`
+# :black_large_square: :red_circle: `generate-shapes`
 
 A script to generate labeled toy datasets for object detection algorithms and
 machine learning models (like [R-CNN](https://arxiv.org/abs/1506.01497)).
