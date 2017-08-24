@@ -32,9 +32,8 @@ def generate_rectangle(x_0, y_0, width, height, color, min_dimension,
         raise ArithmeticError
     w = np.random.randint(min_dimension, available_width)
     h = np.random.randint(min_dimension, available_height)
-    mask = np.zeros((width, height, 3), dtype=np.uint8)
+    mask = np.zeros((height, width, 3), dtype=np.uint8)
     mask[y_0:y_0 + h, x_0:x_0 + w] = color
-    assert mask.sum() > 0
     label = make_label('rectangle', x_0, width, y_0, height)
 
     return mask, label
@@ -51,7 +50,7 @@ def generate_circle(x_0, y_0, width, height, color, min_dimension,
     if available_radius <= min_dimension:
         raise ArithmeticError
     radius = np.random.randint(min_dimension, available_radius)
-    mask = np.zeros((width, height, 3), dtype=np.uint8)
+    mask = np.zeros((height, width, 3), dtype=np.uint8)
     for x in range(x_0 - radius, x_0 + radius + 1):
         y = int(np.sqrt(radius**2 - (x - x_0)**2))
         mask[y_0 - y:y_0 + y + 1, x] = color
@@ -74,7 +73,7 @@ def generate_triangle(x_0, y_0, width, height, color, min_dimension,
     slope = np.sqrt(3)  # this pops up after some math
     y = y_0
     mid_point = x_0 + side / 2
-    mask = np.zeros((width, height, 3), dtype=np.uint8)
+    mask = np.zeros((height, width, 3), dtype=np.uint8)
     # Drawing a linear function with positive slope to the right up to the
     # mid-point, then drawing a linear function with negative slope.
     for x in range(x_0, x_0 + side):
@@ -102,7 +101,7 @@ def pick_color(gray, min_intensity):
 
 def generate_image(width, height, number_of_shapes, min_dimension,
                    max_dimension, gray, shape, min_intensity, allow_overlap):
-    image = np.ones((width, height, 3), dtype=np.uint8) * 255
+    image = np.ones((height, width, 3), dtype=np.uint8) * 255
     labels = []
     for _ in range(number_of_shapes):
         x = np.random.randint(width)
@@ -119,6 +118,7 @@ def generate_image(width, height, number_of_shapes, min_dimension,
         except ArithmeticError:
             pass
         else:
+            assert mask.sum() > 0
             # Check if there is an overlap where the mask is nonzero.
             if allow_overlap or image[mask.nonzero()].min() == 255:
                 image -= mask
