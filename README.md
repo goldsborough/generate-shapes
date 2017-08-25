@@ -39,18 +39,22 @@ Example `labels.json`
   {
     "boxes": [
       {
-        "class": "triangle",
-        "x1": 111,
-        "x2": 239,
-        "y1": -53,
-        "y2": 75
-      },
+        "class": "circle",
+        "x1": 78,
+        "x2": 114,
+        "y1": 24,
+        "y2": 60
+      }
+    ]
+  },
+  {
+    "boxes": [
       {
-        "class": "rectangle",
-        "x1": 95,
-        "x2": 223,
-        "y1": 41,
-        "y2": 169
+        "class": "triangle",
+        "x1": 9,
+        "x2": 68,
+        "y1": 11,
+        "y2": 63
       }
     ]
   }

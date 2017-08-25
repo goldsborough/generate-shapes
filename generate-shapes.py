@@ -70,7 +70,6 @@ def generate_triangle(x_0, y_0, width, height, color, min_dimension,
     if available_side < min_dimension:
         raise ArithmeticError
     side = np.random.randint(min_dimension, available_side + 1)
-    print(side)
     slope = np.sqrt(3)  # this pops up after some math
     y = y_0
     mid_point = x_0 + side / 2
