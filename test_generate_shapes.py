@@ -61,8 +61,8 @@ def test_generates_correct_bounding_boxes_for_triangles():
 def test_generates_correct_bounding_boxes_for_circles():
     (image, ), (labels, ) = generate_shapes(
         number_of_images=1,
-        width=128,
-        height=128,
+        width=43,
+        height=44,
         max_shapes=1,
         min_dimension=20,
         max_dimension=20,
@@ -83,7 +83,7 @@ def test_generate_circle_throws_when_dimension_too_small():
     with pytest.raises(ValueError):
         generate_shapes(
             number_of_images=1,
-            width=128,
+            width=64,
             height=128,
             max_shapes=1,
             min_dimension=1,
@@ -96,7 +96,7 @@ def test_generate_triangle_throws_when_dimension_too_small():
         generate_shapes(
             number_of_images=1,
             width=128,
-            height=128,
+            height=64,
             max_shapes=1,
             min_dimension=1,
             max_dimension=1,
@@ -106,7 +106,7 @@ def test_generate_triangle_throws_when_dimension_too_small():
 def test_can_generate_one_by_one_rectangle():
     (image, ), (labels, ) = generate_shapes(
         number_of_images=1,
-        width=128,
+        width=50,
         height=128,
         max_shapes=1,
         min_dimension=1,
