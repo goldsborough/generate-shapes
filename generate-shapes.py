@@ -11,13 +11,14 @@ import scipy.misc
 NUMBER_OF_ATTEMPS_TO_FIT_SHAPES = 1000
 
 
-def make_label(shape_name, x_0, width, y_0, height):
+def make_label(shape_name, x_1, x_2, y_1, y_2):
+    assert all(i >=0 for i in [x_1, x_2, y_1, y_2])
     return {
         'class': shape_name,
-        'x1': x_0,
-        'x2': x_0 + width,
-        'y1': y_0,
-        'y2': y_0 + height,
+        'x1': x_1,
+        'x2': x_2,
+        'y1': y_1,
+        'y2': y_2,
     }
 
 
@@ -25,16 +26,16 @@ def generate_rectangle(x_0, y_0, width, height, color, min_dimension,
                        max_dimension):
     # (x_0, y_0) is the top left corner
     available_width = min(width - x_0, max_dimension)
-    if available_width <= min_dimension:
+    if available_width < min_dimension:
         raise ArithmeticError
     available_height = min(height - y_0, max_dimension)
-    if available_height <= min_dimension:
+    if available_height < min_dimension:
         raise ArithmeticError
-    w = np.random.randint(min_dimension, available_width)
-    h = np.random.randint(min_dimension, available_height)
+    w = np.random.randint(min_dimension, available_width + 1)
+    h = np.random.randint(min_dimension, available_height + 1)
     mask = np.zeros((height, width, 3), dtype=np.uint8)
     mask[y_0:y_0 + h, x_0:x_0 + w] = color
-    label = make_label('rectangle', x_0, width, y_0, height)
+    label = make_label('rectangle', x_0, x_0 + w, y_0, y_0 + h)
 
     return mask, label
 
@@ -47,16 +48,15 @@ def generate_circle(x_0, y_0, width, height, color, min_dimension,
     top = y_0
     bottom = height - y_0
     available_radius = min(left, right, top, bottom, max_dimension)
-    if available_radius <= min_dimension:
+    if available_radius < min_dimension:
         raise ArithmeticError
-    radius = np.random.randint(min_dimension, available_radius)
+    radius = np.random.randint(min_dimension, available_radius + 1)
     mask = np.zeros((height, width, 3), dtype=np.uint8)
-    for x in range(x_0 - radius, x_0 + radius + 1):
+    for x in range(x_0 - radius, x_0 + radius):
         y = int(np.sqrt(radius**2 - (x - x_0)**2))
         mask[y_0 - y:y_0 + y + 1, x] = color
-    diameter = 2 * radius
-    label = make_label('circle', x_0 - radius, diameter, y_0 - radius,
-                       diameter)
+    label = make_label('circle', x_0 - radius, x_0 + radius, y_0 - radius,
+                       y_0 + radius)
 
     return mask, label
 
@@ -69,7 +69,8 @@ def generate_triangle(x_0, y_0, width, height, color, min_dimension,
     available_side = min(width - x_0, y_0 + 1, max_dimension)
     if available_side < min_dimension:
         raise ArithmeticError
-    side = np.random.randint(min_dimension, available_side)
+    side = np.random.randint(min_dimension, available_side + 1)
+    print(side)
     slope = np.sqrt(3)  # this pops up after some math
     y = y_0
     mid_point = x_0 + side / 2
@@ -77,13 +78,14 @@ def generate_triangle(x_0, y_0, width, height, color, min_dimension,
     # Drawing a linear function with positive slope to the right up to the
     # mid-point, then drawing a linear function with negative slope.
     for x in range(x_0, x_0 + side):
-        mask[int(y):y_0, x] = color
         if x < mid_point:
             # Subtracting y means going up ((0, 0) is top left)
             y -= slope
-        else:
+        elif x > mid_point or side % 2 != 0:
             y += slope
-    label = make_label('triangle', x_0, width, y_0 - height, height)
+        mask[int(y):y_0, x] = color
+    triangle_height = int((side/2) * slope) + 1
+    label = make_label('triangle', x_0, x_0 + side, y_0 - triangle_height, y_0)
 
     return mask, label
 
@@ -228,8 +230,6 @@ def parse():
     if options.max_dimension is None:
         options.max_dimension = max(options.height, options.width)
 
-    if options.max_dimension - options.min_dimension < 2:
-        raise RuntimeError('Available dimension would be too small')
     if (options.min_dimension >= options.width
             or options.min_dimension >= options.height):
         raise RuntimeError(
